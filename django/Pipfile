@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+daphne = "==4.1.2"
+django = "==5.1.4"
+channels = "==4.2.0"
+channels-redis = "4.2.1"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"
+python_full_version = "3.12.8"

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Create a new chat room</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit"> Create New Room</button>
+    </form>
+
+    <h2>Enter a chat room</h2>
+
+    {% for room in rooms %}
+        <a href="{% url 'chat:room' room.public_id %}">{{ room.name }}</a><br>
+    {% endfor %}
+
+{% endblock %}
+

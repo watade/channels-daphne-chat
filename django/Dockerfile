@@ -1,7 +1,7 @@
-FROM python:3.12-slim-bullseye as builder
+FROM python:3.12-slim-bullseye AS builder
 WORKDIR /usr/src/app
 ENV PIPENV_VENV_IN_PROJECT=1
-COPY Pipfile ./
+COPY Pipfile Pipfile.lock ./
 RUN pip install --upgrade pip \
     && pip install pipenv \
     && pipenv sync --dev --system

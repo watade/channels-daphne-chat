@@ -7,9 +7,9 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=postgresdb
-      - POSTGRES_USER=postgresuser
-      - POSTGRES_PASSWORD=postgresdjangoecs
+      - POSTGRES_DB=${POSTGRES_NAME}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
   django:
     container_name: django
     build: ./django
@@ -17,22 +17,21 @@ services:
       - ./django:/usr/src/app
     environment:
       - POSTGRES_HOST=postgres
-      - POSTGRES_NAME=postgresdb
-      - POSTGRES_USER=postgresuser
-      - POSTGRES_PASSWORD=postgresdjangoecs
+      - POSTGRES_NAME=${POSTGRES_NAME}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_PORT=5432
-    # command: |
-    #   bash -c "python manage.py makemigrations &&
-    #   python manage.py migrate &&
-    #   python manage.py runserver 0.0.0.0:8000"
+      - SECRET_KEY=${SECRET_KEY}
+    command: |
+      bash -c "python manage.py makemigrations &&
+      python manage.py migrate &&
+      python -m daphne -b 0.0.0.0 --port 8000 config.asgi:application"
     tty: true
     ports:
       - 8000:8000
-    # command: |
-    #   bash -c "python manage.py collectstatic --noinput &&
-    #   python manage.py makemigrations &&
-    #   python manage.py migrate &&
-    #   gunicorn myapp.wsgi --bind=unix:/var/run/gunicorn/gunicorn.sock"
+    depends_on:
+      - postgres
+      - redis
   redis:
     image: redis:7.4.1
     container_name: redis

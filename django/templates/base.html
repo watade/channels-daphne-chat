@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Django Chat Room</title>
+  </head>
+  <body>
+    <div class="header">
+      <nav class="header-nav">
+        <a href="{% url 'chat:index' %}">Home</a>
+        {% if user.is_authenticated %}
+          <form action="{% url 'accounts:logout' %}" method="post" name="logout_form">
+              {% csrf_token %}
+              <input type="hidden" name="logout" value="logout">
+              <a href="javascript:logout_form.submit()">Logout</a>
+          </form>
+        {% else %}
+          <a href="{% url 'accounts:login' %}">Login</a>
+          <a href="{% url 'accounts:signup' %}">Signup</a>
+        {% endif %}
+      </nav>
+      <div>
+        {{ user.username }}
+      </div>
+    </div>
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+  </body>
+</html>
+
+<style>
+  .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .header-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .header-nav a {
+    margin: 0 2px;
+  }
+
+  body {
+    margin: 20px 10vw;
+  }
